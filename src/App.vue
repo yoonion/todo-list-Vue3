@@ -3,17 +3,7 @@
 
     <h1>To-Do List</h1>
     <TodoSimpleForm @add-task="addTask" />
-    <div v-for="(todo, index) in todoList" :key="todo.id" class="card mt-2">
-      <div class="card-body p-2 d-flex align-items-center">
-        <div class="form-check flex-grow-1">
-          <input v-model="todo.completed" class="form-check-input" type="checkbox">
-          <label :class="{ todoCompleted: todo.completed }" class="form-check-label">{{ todo.subject }}</label>
-        </div>
-        <div>
-            <button class="btn btn-danger btn-sm" @click="deleteTask(index)">Delete</button>
-          </div>
-      </div>
-    </div>
+    <TodoList :todoList="todoList" @toggle-todo="toggleTodo" />
 
   </div>
 </template>
@@ -21,16 +11,18 @@
 <script>
 import { ref } from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
+import TodoList from './components/TodoList.vue';
 
 export default {
   components: {
-    TodoSimpleForm
+    TodoSimpleForm,
+    TodoList
   },
   setup() {
     
     const todoList = ref([]);
 
-    // TodoSimpleForm 컴포넌트에서 받아온 데이터 추가 시킨다
+    // 할 일 추가 - TodoSimpleForm 컴포넌트에서 받아온 데이터 추가 시킨다
     const addTask = (todo) => {
       todoList.value.push(todo);
     };
@@ -40,10 +32,16 @@ export default {
       todoList.value.splice(index, 1);
     };
 
+    // 완료한 일 체크 - TodoList 컴포넌트에서 받아온 데이터로 수정한다. > 자식 컴포넌트 자체에서 데이터 조작하면 안 됨
+    const toggleTodo = (index) => {
+      todoList.value[index].completed = !todoList.value[index].completed;
+    }
+
     return {
       todoList,
       addTask,
-      deleteTask
+      deleteTask,
+      toggleTodo
     }
   }
 }
