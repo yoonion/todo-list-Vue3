@@ -16,6 +16,7 @@
   import { ref } from 'vue';
 
   export default {
+    emits: ['add-task'],
     setup(porps, context) {
       const todo = ref('');
       const hasErr = ref(false); // 할 일 적지 않았을 경우 체크 플래그

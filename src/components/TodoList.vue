@@ -15,13 +15,19 @@
 <script>
 export default {
   props: ['todoList'],
+  emits: ['toggle-todo', 'delete-task'],
   setup(props, context) {
     const toggleTodo = (index) => {
       context.emit('toggle-todo', index);
     }
 
+    const deleteTask = (index) => {
+      context.emit('delete-task', index);
+    }
+
     return {
       toggleTodo,
+      deleteTask
     }
   }
 }
