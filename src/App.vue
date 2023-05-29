@@ -8,6 +8,16 @@
     <div style="color: red">{{ error }}</div>
     <div v-if="!filteredTodos.length">할 일이 없습니다.</div>
     <TodoList :todoList="filteredTodos" @toggle-todo="toggleTodo" @delete-task="deleteTask" />
+    <br>
+
+    <!-- Pagination -->
+    <nav>
+      <ul class="pagination" style="justify-content: center;">
+        <li v-if="currentPage !== 1" class="page-item"><a class="page-link" @click="getTodoList(currentPage - 1)">Previous</a></li>
+        <li v-for="page in totalPage" :key="page" class="page-item" :class="currentPage === page ? 'active' : ''"><a class="page-link" @click="getTodoList(page)">{{ page }}</a></li>
+        <li v-if="currentPage !== totalPage" class="page-item"><a class="page-link" @click="getTodoList(currentPage + 1)">Next</a></li>
+      </ul>
+    </nav>
 
   </div>
 </template>
@@ -26,12 +36,22 @@ export default {
   setup() {
     
     const todoList = ref([]);
-    const error = ref('');
+    const error = ref(''); // 에러 메시지 출력용
+    const totalTodoCount = ref(0); // todo 총 개수
+    const limit = 7; // 페이지당 보여줄 todo 개수
+    const currentPage = ref(1);
 
-    // json-server todoList 가져오기
-    const getTodoList = async () => {
+    // 페이지 총 개수
+    const totalPage = computed(() => {
+      return Math.ceil(totalTodoCount.value/limit);
+    });
+
+    // json-server (db.json)에서 todoList 가져오기
+    const getTodoList = async (page = currentPage.value) => {
+      currentPage.value = page;
       try {
-        const res = await axios.get('http://localhost:3000/todoList');
+        const res = await axios.get(`http://localhost:3000/todoList?_page=${page}&_limit=${limit}`);
+        totalTodoCount.value = res.headers['x-total-count']; // todo 총 개수
         todoList.value = res.data; // 가져온 todo데이터를 넣어준다.
       }
       catch (err) {
@@ -39,17 +59,17 @@ export default {
         error.value = '!! ERROR: getTodoList error. !!'
       }
     }
-    getTodoList();
+    getTodoList(); // todoList 불러오기
 
     // 할 일 추가 - TodoSimpleForm 컴포넌트에서 받아온 데이터 추가 시킨다
     const addTask = async (todo) => {
       // 데이터베이스(json-server)에 저장
       try {
         const res = await axios.post('http://localhost:3000/todoList', {
-          subject: todo.subject,
-          completed: todo.completed
-      });
-      todoList.value.push(res.data);
+            subject: todo.subject,
+            completed: todo.completed
+        });
+        todoList.value.push(res.data);
       }
       catch (err) {
         console.log(err);
@@ -105,6 +125,8 @@ export default {
       searchText,
       filteredTodos,
       error,
+      totalPage,
+      currentPage,
       getTodoList
     }
   }
@@ -112,5 +134,6 @@ export default {
 </script>
 
 <style>
+  a {cursor: pointer;}
   .todoCompleted { color: gray; text-decoration: line-through; }
 </style>
