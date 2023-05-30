@@ -31,7 +31,7 @@ npm install -g json-server
 # json server를 시작해요.
 json-server --watch db.json 
 ```
-- 정상적으로 실행이 됐다면, 프로젝트에 포함된 **db.json** 파일에서 저장된 데이터를 볼 수 있어요.
+- 프로젝트에 포함된 **db.json** 파일에서 저장된 데이터를 볼 수 있어요.
 - <http://localhost:3000/todoList> 에서도 저장된 데이터를 볼 수 있어요.
 
 ### 3. Vue 프로젝트를 실행해요.
