@@ -16,16 +16,6 @@
       "id": 3
     },
     {
-      "subject": "4",
-      "completed": false,
-      "id": 4
-    },
-    {
-      "subject": "5",
-      "completed": false,
-      "id": 5
-    },
-    {
       "subject": "6",
       "completed": false,
       "id": 6
@@ -76,7 +66,7 @@
       "id": 15
     },
     {
-      "subject": "안녕",
+      "subject": "아아",
       "completed": false,
       "id": 16
     },
@@ -86,44 +76,14 @@
       "id": 17
     },
     {
-      "subject": "반갑습니다",
+      "subject": "1234",
       "completed": false,
       "id": 18
     },
     {
-      "subject": "하이",
+      "subject": "12345",
       "completed": false,
       "id": 19
-    },
-    {
-      "subject": "안녕",
-      "completed": true,
-      "id": 20
-    },
-    {
-      "subject": "아",
-      "completed": false,
-      "id": 21
-    },
-    {
-      "subject": "아",
-      "completed": false,
-      "id": 22
-    },
-    {
-      "subject": "아",
-      "completed": false,
-      "id": 23
-    },
-    {
-      "subject": "안녕",
-      "completed": false,
-      "id": 24
-    },
-    {
-      "subject": "안녕",
-      "completed": false,
-      "id": 25
     }
   ]
 }

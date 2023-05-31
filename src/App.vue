@@ -2,12 +2,12 @@
   <div class="container">
 
     <h1>To-Do List</h1>
-    <input class="form-control" type="text" v-model="searchText" placeholder="Search">
+    <input class="form-control" type="text" @keyup.enter="searchTodo" v-model="searchText" placeholder="Search">
     <hr>
     <TodoSimpleForm @add-task="addTask" />
     <div style="color: red">{{ error }}</div>
-    <div v-if="!filteredTodos.length">할 일이 없습니다.</div>
-    <TodoList :todoList="filteredTodos" @toggle-todo="toggleTodo" @delete-task="deleteTask" />
+    <div v-if="!todoList.length">할 일이 없습니다.</div>
+    <TodoList :todoList="todoList" @toggle-todo="toggleTodo" @delete-task="deleteTask" />
     <br>
 
     <!-- Pagination -->
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import TodoSimpleForm from './components/TodoSimpleForm.vue';
 import TodoList from './components/TodoList.vue';
 import axios from 'axios';
@@ -38,8 +38,9 @@ export default {
     const todoList = ref([]);
     const error = ref(''); // 에러 메시지 출력용
     const totalTodoCount = ref(0); // todo 총 개수
-    const limit = 7; // 페이지당 보여줄 todo 개수
+    const limit = 5; // 페이지당 보여줄 todo 개수
     const currentPage = ref(1);
+    const searchText = ref(''); // todo 검색 텍스트
 
     // 페이지 총 개수
     const totalPage = computed(() => {
@@ -50,7 +51,7 @@ export default {
     const getTodoList = async (page = currentPage.value) => {
       currentPage.value = page;
       try {
-        const res = await axios.get(`http://localhost:3000/todoList?_page=${page}&_limit=${limit}`);
+        const res = await axios.get(`http://localhost:3000/todoList?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`);
         totalTodoCount.value = res.headers['x-total-count']; // todo 총 개수
         todoList.value = res.data; // 가져온 todo데이터를 넣어준다.
       }
@@ -65,11 +66,11 @@ export default {
     const addTask = async (todo) => {
       // 데이터베이스(json-server)에 저장
       try {
-        const res = await axios.post('http://localhost:3000/todoList', {
+        await axios.post('http://localhost:3000/todoList', {
             subject: todo.subject,
             completed: todo.completed
         });
-        todoList.value.push(res.data);
+        getTodoList(1);
       }
       catch (err) {
         console.log(err);
@@ -82,7 +83,7 @@ export default {
       const id = todoList.value[index].id; // 할 일 id
       try {
         await axios.delete('http://localhost:3000/todoList/' + id);
-        todoList.value.splice(index, 1);
+        getTodoList(1);
       }
       catch (err) {
         console.log(err);
@@ -106,15 +107,20 @@ export default {
     }
 
     // todo 검색
-    const searchText = ref('');
-    const filteredTodos = computed(() => {
-      if(searchText.value) {
-        return todoList.value.filter(todo => {
-          return todo.subject.includes(searchText.value);
-        });
-      }
+    let timeOut = null;
 
-      return todoList.value;
+    // 엔터로 바로검색 하기
+    const searchTodo = () => {
+      clearTimeout(timeOut);
+      getTodoList(1);
+    }
+
+    // 엔터를 치지 않았을 경우, 글자 바뀔 때 마다 자동으로 search 해준다.
+    watch(searchText, () => {
+      clearTimeout(timeOut); // timeout 초기화
+      timeOut = setTimeout(() => {
+        getTodoList(1);
+      }, 1000);
     });
 
     return {
@@ -123,11 +129,12 @@ export default {
       deleteTask,
       toggleTodo,
       searchText,
-      filteredTodos,
+      searchTodo,
       error,
       totalPage,
       currentPage,
       getTodoList
+      
     }
   }
 }
