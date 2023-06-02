@@ -1,16 +1,18 @@
 <template>
   <!-- nav bar -->
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <router-link class="navbar-brand" to="/">Home</router-link>
+    <router-link class="navbar-brand" :to="{ name: 'Home' }">Home</router-link>
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <router-link class="nav-link" to="/todolist">Todo list</router-link>
+        <router-link class="nav-link" :to="{ name: 'TodoList' }">Todo list</router-link>
       </li>
     </ul>
   </nav>
 
   <!-- component 불러오는 곳 -->
-  <router-view/>
+  <div class="container">
+    <router-view/>
+  </div>
 </template>
 
 <script>

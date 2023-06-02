@@ -1,24 +1,9 @@
 {
   "todoList": [
     {
-      "subject": "1",
-      "completed": false,
-      "id": 1
-    },
-    {
-      "subject": "2",
-      "completed": false,
-      "id": 2
-    },
-    {
       "subject": "3",
       "completed": false,
       "id": 3
-    },
-    {
-      "subject": "6",
-      "completed": false,
-      "id": 6
     },
     {
       "subject": "7",
@@ -66,7 +51,7 @@
       "id": 15
     },
     {
-      "subject": "아아",
+      "subject": "아아ddfdsa",
       "completed": false,
       "id": 16
     },
@@ -76,14 +61,9 @@
       "id": 17
     },
     {
-      "subject": "1234",
-      "completed": false,
-      "id": 18
-    },
-    {
       "subject": "12345",
       "completed": false,
-      "id": 19
+      "id": 18
     }
   ]
 }
