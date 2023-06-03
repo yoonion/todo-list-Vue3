@@ -20,18 +20,23 @@
     </nav>
 
   </div>
+  <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
 </template>
 
 <script>
 import { ref, computed, watch } from 'vue';
 import TodoSimpleForm from '@/components/TodoSimpleForm.vue';
 import TodoList from '@/components/TodoList.vue';
+import Toast from '@/components/Toast.vue';
 import axios from 'axios';
+import { useToast } from '@/composables/toast';
+
 
 export default {
   components: {
     TodoSimpleForm,
-    TodoList
+    TodoList,
+    Toast
   },
   setup() {
     
@@ -41,6 +46,14 @@ export default {
     const limit = 5; // 페이지당 보여줄 todo 개수
     const currentPage = ref(1);
     const searchText = ref(''); // todo 검색 텍스트
+
+    // toast 컴포넌트 관련
+    const {
+      triggerToast,
+      showToast,
+      toastMessage,
+      toastAlertType
+    } = useToast();
 
     // 페이지 총 개수
     const totalPage = computed(() => {
@@ -58,6 +71,7 @@ export default {
       catch (err) {
         console.log(err);
         error.value = '!! ERROR: getTodoList error. !!'
+        triggerToast('getTodoList - ERROR!!', 'danger');
       }
     }
     getTodoList(); // todoList 불러오기
@@ -75,6 +89,7 @@ export default {
       catch (err) {
         console.log(err);
         error.value = '!! ERROR: addTask error. !!'
+        triggerToast('addTask - ERROR!!', 'danger');
       }
     };
 
@@ -88,6 +103,7 @@ export default {
       catch (err) {
         console.log(err);
         error.value = '!! ERROR: deleteTask error. !!'
+        triggerToast('deleteTask - ERROR!!', 'danger');
       }
     };
 
@@ -103,6 +119,7 @@ export default {
       catch (err) {
         console.log(err);
         error.value = '!! ERROR: toggleTodo error. !!'
+        triggerToast('toggleTodo - ERROR!!', 'danger');
       }
     }
 
@@ -133,8 +150,10 @@ export default {
       error,
       totalPage,
       currentPage,
-      getTodoList
-      
+      getTodoList,
+      toastMessage,
+      toastAlertType,
+      showToast
     }
   }
 }

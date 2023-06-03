@@ -23,6 +23,7 @@
     <button type="submit" class="btn btn-primary" :disabled="!todoUpdated">Save</button>
     <button @click="moveToTodoList" class="btn btn-outline-dark ml-2">Cancel</button>
   </form>
+  <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
 </template>
 
 <script>
@@ -30,24 +31,46 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { computed, ref } from 'vue';
 import _ from 'lodash'; // lodash library
+import Toast from '@/components/Toast.vue';
+import { useToast } from '@/composables/toast';
 
 export default {
+  components: {
+    Toast
+  },
   setup() {
+
     const route = useRoute();
     const router = useRouter();
     const todo = ref(null);
     const originalTodo = ref(null); // todo의 정보가 변경됐는지 안 됐는지 확인하기 위한 변수
     const loading = ref(true);
+    const timeout = ref(null);
     const todoId = route.params.id; // todo id값
+
+    // toast 컴포넌트 관련
+    const {
+      triggerToast,
+      showToast,
+      toastMessage,
+      toastAlertType
+    } = useToast();
 
     // 해당하는 todo 가져오기
     const getTodo = async () => {
-      const res = await axios.get(`http://localhost:3000/todolist/${todoId}`);
+      try {
+        const res = await axios.get(`http://localhost:3000/todolist/${todoId}`);
 
-      todo.value = { ...res.data };
-      originalTodo.value = { ...res.data }; // 변경사항이 있는지 확인하는 용도
+        todo.value = { ...res.data };
+        originalTodo.value = { ...res.data }; // 변경사항이 있는지 확인하는 용도
 
-      loading.value = false;
+        loading.value = false;  
+      } 
+      catch (error) {
+        console.log(`getTodo ERROR ! --- ${error}`);
+        triggerToast('getTodo - ERROR!!', 'danger');
+      }
+      
     }
     getTodo();
 
@@ -58,14 +81,22 @@ export default {
 
     // 저장 (Save)
     const onSave = async () => {
-      const res = await axios.put(`http://localhost:3000/todolist/${todoId}`, {
-        subject: todo.value.subject,
-        completed: todo.value.completed
-      });
+      try {
+        const res = await axios.put(`http://localhost:3000/todolist/${todoId}`, {
+          subject: todo.value.subject,
+          completed: todo.value.completed
+        });
 
-      originalTodo.value = { ...res.data };
+        originalTodo.value = { ...res.data };
+        triggerToast('저장 성공!');  
+      } 
+      catch (error) {
+        console.log(`onSave ERROR ! --- ${error}`);
+        triggerToast('onSave - ERROR!!', 'danger');
+      }
+      
     }
-
+   
     // 상태값 변경
     const toggleTodoStatus = () => {
       todo.value.completed = !todo.value.completed;
@@ -75,7 +106,7 @@ export default {
     const moveToTodoList = () => {
       router.push({
         name: 'TodoList'
-      })
+      });
     }
 
     return {
@@ -84,7 +115,10 @@ export default {
       toggleTodoStatus,
       moveToTodoList,
       onSave,
-      todoUpdated
+      todoUpdated,
+      showToast,
+      toastMessage,
+      toastAlertType,
     }
 
   }
