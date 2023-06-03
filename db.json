@@ -1,69 +1,28 @@
 {
   "todoList": [
     {
-      "subject": "3",
+      "subject": "test1",
       "completed": false,
+      "body": "hihi",
+      "id": 1
+    },
+    {
+      "subject": "gd",
+      "completed": false,
+      "body": "gd",
+      "id": 2
+    },
+    {
+      "subject": "gd",
+      "completed": false,
+      "body": "gd",
       "id": 3
     },
     {
-      "subject": "7",
+      "subject": "test1",
       "completed": false,
-      "id": 7
-    },
-    {
-      "subject": "8",
-      "completed": false,
-      "id": 8
-    },
-    {
-      "subject": "9",
-      "completed": false,
-      "id": 9
-    },
-    {
-      "subject": "10",
-      "completed": false,
-      "id": 10
-    },
-    {
-      "subject": "11",
-      "completed": false,
-      "id": 11
-    },
-    {
-      "subject": "12",
-      "completed": false,
-      "id": 12
-    },
-    {
-      "subject": "13",
-      "completed": false,
-      "id": 13
-    },
-    {
-      "subject": "14",
-      "completed": false,
-      "id": 14
-    },
-    {
-      "subject": "15",
-      "completed": false,
-      "id": 15
-    },
-    {
-      "subject": "아아ddfdsa",
-      "completed": false,
-      "id": 16
-    },
-    {
-      "subject": "안녕하세요",
-      "completed": false,
-      "id": 17
-    },
-    {
-      "subject": "123456781011",
-      "completed": false,
-      "id": 18
+      "body": "hihigdgd",
+      "id": 4
     }
   ]
 }

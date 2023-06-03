@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Home from '@/pages/index.vue';
 import TodoList from '@/pages/todolist/index.vue';
 import Todo from '@/pages/todolist/_id.vue';
+import TodoCreate from '@/pages/todolist/create/index.vue';
 
 const router = createRouter({
   history: createWebHistory(),
@@ -15,6 +16,11 @@ const router = createRouter({
       path: '/todolist',
       name: 'TodoList',
       component: TodoList
+    },
+    {
+      path: '/todolist/create',
+      name: 'TodoCreate',
+      component: TodoCreate
     },
     {
       path: '/todolist/:id',

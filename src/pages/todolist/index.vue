@@ -1,10 +1,14 @@
 <template>
   <div>
+    <div class="d-flex justify-content-between mb-3">
+      <h1>To-Do List</h1>
+      <button class="btn btn-primary" @click="moveToCreatePage">Create Todo</button>
+    </div>
 
-    <h1>To-Do List</h1>
+    <!-- Search bar -->
     <input class="form-control" type="text" @keyup.enter="searchTodo" v-model="searchText" placeholder="Search">
     <hr>
-    <TodoSimpleForm @add-task="addTask" />
+
     <div style="color: red">{{ error }}</div>
     <div v-if="!todoList.length">할 일이 없습니다.</div>
     <TodoList :todoList="todoList" @toggle-todo="toggleTodo" @delete-task="deleteTask" />
@@ -25,21 +29,20 @@
 
 <script>
 import { ref, computed, watch } from 'vue';
-import TodoSimpleForm from '@/components/TodoSimpleForm.vue';
 import TodoList from '@/components/TodoList.vue';
 import Toast from '@/components/Toast.vue';
 import axios from 'axios';
 import { useToast } from '@/composables/toast';
-
+import { useRouter } from 'vue-router';
 
 export default {
   components: {
-    TodoSimpleForm,
     TodoList,
     Toast
   },
   setup() {
     
+    const router = useRouter();
     const todoList = ref([]);
     const error = ref(''); // 에러 메시지 출력용
     const totalTodoCount = ref(0); // todo 총 개수
@@ -140,6 +143,12 @@ export default {
       }, 1000);
     });
 
+    const moveToCreatePage = () => {
+      router.push({
+        name: 'TodoCreate'
+      });
+    }
+
     return {
       todoList,
       addTask,
@@ -153,7 +162,8 @@ export default {
       getTodoList,
       toastMessage,
       toastAlertType,
-      showToast
+      showToast,
+      moveToCreatePage
     }
   }
 }
