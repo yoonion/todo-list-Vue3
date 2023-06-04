@@ -97,8 +97,7 @@ export default {
     };
 
     // 할 일 삭제
-    const deleteTask = async (index) => {
-      const id = todoList.value[index].id; // 할 일 id
+    const deleteTask = async (id) => {
       try {
         await axios.delete('http://localhost:3000/todoList/' + id);
         getTodoList(1);

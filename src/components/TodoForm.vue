@@ -28,7 +28,9 @@
     <button type="submit" class="btn btn-primary" :disabled="!todoUpdated">{{ editing ? 'Update' : 'Create' }}</button>
     <button @click="moveToTodoList" class="btn btn-outline-dark ml-2">Cancel</button>
   </form>
-  <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />  
+  <transition name="fade">
+    <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+  </transition>
 </template>
 
 <script>
@@ -159,6 +161,21 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: all 0.5s ease;
+  }
 
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  .fade-enter-to,
+  .fade-leave-from {
+    opacity: 1;
+    transform: translateY(0px);
+  }
 </style>
