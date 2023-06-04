@@ -112,7 +112,7 @@ export default {
 
       try {
         // 수정 페이지의 경우
-        if(todo.editing) {
+        if(props.editing) {
           res = await axios.put(`http://localhost:3000/todolist/${todoId}`, data);
           originalTodo.value = { ...res.data };
         }
