@@ -5,10 +5,7 @@
   <form v-else @submit.prevent="onSave">
     <div class="row">
       <div class="col-6">
-        <div class="form-group">
-          <label>Subject</label>
-          <input v-model="todo.subject" type="text" class="form-control">
-        </div>
+        <Input label="Subject" v-model:subject="todo.subject" />
       </div>
       <div v-if="editing" class="col-6">
         <div class="form-group">
@@ -40,10 +37,12 @@ import { computed, ref } from 'vue';
 import _ from 'lodash'; // lodash library
 import Toast from '@/components/Toast.vue';
 import { useToast } from '@/composables/toast';
+import Input from '@/components/Input.vue';
 
 export default {
   components: {
-    Toast
+    Toast,
+    Input
   },
   props: {
     editing: {
