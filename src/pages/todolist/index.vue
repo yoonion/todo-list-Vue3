@@ -31,7 +31,7 @@
 import { ref, computed, watch } from 'vue';
 import TodoList from '@/components/TodoList.vue';
 import Toast from '@/components/Toast.vue';
-import axios from 'axios';
+import axios from '@/axios';
 import { useToast } from '@/composables/toast';
 import { useRouter } from 'vue-router';
 
@@ -67,7 +67,7 @@ export default {
     const getTodoList = async (page = currentPage.value) => {
       currentPage.value = page;
       try {
-        const res = await axios.get(`http://localhost:3000/todoList?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`);
+        const res = await axios.get(`todoList?_sort=id&_order=desc&subject_like=${searchText.value}&_page=${page}&_limit=${limit}`);
         totalTodoCount.value = res.headers['x-total-count']; // todo 총 개수
         todoList.value = res.data; // 가져온 todo데이터를 넣어준다.
       }
@@ -83,7 +83,7 @@ export default {
     const addTask = async (todo) => {
       // 데이터베이스(json-server)에 저장
       try {
-        await axios.post('http://localhost:3000/todoList', {
+        await axios.post('todoList', {
             subject: todo.subject,
             completed: todo.completed
         });
@@ -99,7 +99,7 @@ export default {
     // 할 일 삭제
     const deleteTask = async (id) => {
       try {
-        await axios.delete('http://localhost:3000/todoList/' + id);
+        await axios.delete('todoList/' + id);
         getTodoList(1);
       }
       catch (err) {
@@ -113,7 +113,7 @@ export default {
     const toggleTodo = async (index) => {
       const id = todoList.value[index].id; // 할 일 id
       try {
-        await axios.patch('http://localhost:3000/todoList/' + id, {
+        await axios.patch('todoList/' + id, {
           completed: !todoList.value[index].completed
         });
         todoList.value[index].completed = !todoList.value[index].completed;

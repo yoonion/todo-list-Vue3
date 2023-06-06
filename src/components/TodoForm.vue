@@ -32,7 +32,7 @@
 
 <script>
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import axios from '@/axios';
 import { computed, ref } from 'vue';
 import _ from 'lodash'; // lodash library
 import Toast from '@/components/Toast.vue';
@@ -75,7 +75,7 @@ export default {
     const getTodo = async () => {
       loading.value = true;
       try {
-        const res = await axios.get(`http://localhost:3000/todolist/${todoId}`);
+        const res = await axios.get(`todolist/${todoId}`);
 
         todo.value = { ...res.data };
         originalTodo.value = { ...res.data }; // 변경사항이 있는지 확인하는 용도
@@ -114,12 +114,12 @@ export default {
       try {
         // 수정 페이지의 경우
         if(props.editing) {
-          res = await axios.put(`http://localhost:3000/todolist/${todoId}`, data);
+          res = await axios.put(`todolist/${todoId}`, data);
           originalTodo.value = { ...res.data };
         }
         // Create 페이지의 경우
         else {
-          res = await axios.post(`http://localhost:3000/todolist/`, data);
+          res = await axios.post(`todolist/`, data);
         }
         
         const msg = 'Successfully ' + (props.editing ? 'Updated !' : 'Created !');
