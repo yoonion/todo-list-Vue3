@@ -1,15 +1,19 @@
 <template>
-  <div v-for="(todo, index) in todoList" :key="todo.id" class="card mt-2">
-    <div class="card-body p-2 d-flex align-items-center" style="cursor: pointer" @click="moveToPage(todo.id)">
-      <div class="form-check flex-grow-1">
-        <input :checked="todo.completed" @click.stop="toggleTodo(index)" class="form-check-input" type="checkbox">
-        <span :class="{ todoCompleted: todo.completed }">{{ todo.subject }}</span>
+  <!-- <div v-for="(todo, index) in todoList" :key="todo.id" class="card mt-2"> -->
+  <List :items="todoList">
+    <template #default="{ item, index }">
+      <div class="card-body p-2 d-flex align-items-center" style="cursor: pointer" @click="moveToPage(item.id)">
+        <div class="form-check flex-grow-1">
+          <input :checked="item.completed" @click.stop="toggleTodo(index)" class="form-check-input" type="checkbox">
+          <span :class="{ todoCompleted: item.completed }">{{ item.subject }}</span>
+        </div>
+        <div>
+          <button class="btn btn-danger btn-sm" @click.stop="openModal(item.id)">Delete</button>
+        </div>
       </div>
-      <div>
-        <button class="btn btn-danger btn-sm" @click.stop="openModal(todo.id)">Delete</button>
-      </div>
-    </div>
-  </div>
+    </template>
+  </List>
+  <!-- </div> -->
   <teleport to="#modal">
     <Modal v-if="showModal" @close="closeModal" @delete="deleteTask">Delete Todo</Modal>
   </teleport>
@@ -19,10 +23,12 @@
 import { useRouter } from 'vue-router';
 import Modal from '@/components/DeleteModal.vue';
 import { ref } from 'vue';
+import List from '@/components/List.vue';
 
 export default {
   components: {
-    Modal
+    Modal,
+    List
   },
   props: ['todoList'],
   emits: ['toggle-todo', 'delete-task'],

@@ -2,7 +2,7 @@
   "todoList": [
     {
       "subject": "test1",
-      "completed": false,
+      "completed": true,
       "body": "hihi",
       "id": 1
     },
@@ -13,9 +13,9 @@
       "id": 2
     },
     {
-      "subject": "gd",
+      "subject": "hello",
       "completed": false,
-      "body": "gd",
+      "body": "hihi\n",
       "id": 3
     }
   ]
