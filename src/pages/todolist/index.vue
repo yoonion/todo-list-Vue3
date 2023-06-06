@@ -30,7 +30,6 @@
 <script>
 import { ref, computed, watch } from 'vue';
 import TodoList from '@/components/TodoList.vue';
-import Toast from '@/components/Toast.vue';
 import axios from '@/axios';
 import { useToast } from '@/composables/toast';
 import { useRouter } from 'vue-router';
@@ -38,7 +37,6 @@ import { useRouter } from 'vue-router';
 export default {
   components: {
     TodoList,
-    Toast
   },
   setup() {
     
