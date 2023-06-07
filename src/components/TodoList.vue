@@ -1,5 +1,4 @@
 <template>
-  <!-- <div v-for="(todo, index) in todoList" :key="todo.id" class="card mt-2"> -->
   <List :items="todoList">
     <template #default="{ item, index }">
       <div class="card-body p-2 d-flex align-items-center" style="cursor: pointer" @click="moveToPage(item.id)">
@@ -13,7 +12,6 @@
       </div>
     </template>
   </List>
-  <!-- </div> -->
   <teleport to="#modal">
     <Modal v-if="showModal" @close="closeModal" @delete="deleteTask">Delete Todo</Modal>
   </teleport>
@@ -39,6 +37,7 @@ export default {
 
     // modal 창 열기
     const openModal = (id) => {
+      console.log('open modal!');
       showModal.value = true;
       todoDeleteId.value = id; // 삭제시킬 todo id 값
     }

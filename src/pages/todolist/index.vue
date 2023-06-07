@@ -1,8 +1,11 @@
 <template>
   <div>
-    <div class="d-flex justify-content-between mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-3">
       <h1>To-Do List</h1>
-      <button class="btn btn-primary" @click="moveToCreatePage">Create Todo</button>
+      <div>
+        <button class="btn btn-primary mr-2" @click="moveToCreatePage">Create Todo</button>
+        <button class="btn btn-danger" @click="openDelAllModal">Delete All Todo</button>
+      </div>
     </div>
 
     <!-- Search bar -->
@@ -24,7 +27,10 @@
     </nav>
 
   </div>
-  <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" />
+  <!-- <Toast v-if="showToast" :message="toastMessage" :type="toastAlertType" /> -->
+  <teleport to="#modal">
+    <DeleteAllModal v-if="showDelAllModal" @close="closeModal" @delete-all="deleteAllTodo">Delete All Todo</DeleteAllModal>
+  </teleport>
 </template>
 
 <script>
@@ -33,10 +39,12 @@ import TodoList from '@/components/TodoList.vue';
 import axios from '@/axios';
 import { useToast } from '@/composables/toast';
 import { useRouter } from 'vue-router';
+import DeleteAllModal from '@/components/DeleteAllModal.vue';
 
 export default {
   components: {
     TodoList,
+    DeleteAllModal
   },
   setup() {
     
@@ -47,6 +55,8 @@ export default {
     const limit = 5; // 페이지당 보여줄 todo 개수
     const currentPage = ref(1);
     const searchText = ref(''); // todo 검색 텍스트
+    const showDelAllModal = ref(false);
+    const allTodoIdArray = ref([]);
 
     // toast 컴포넌트 관련
     const {
@@ -70,12 +80,12 @@ export default {
         todoList.value = res.data; // 가져온 todo데이터를 넣어준다.
       }
       catch (err) {
-        console.log(err);
+        console.log('getTodoList ERROR ~~ ' + err);
         error.value = '!! ERROR: getTodoList error. !!'
         triggerToast('getTodoList - ERROR!!', 'danger');
       }
     }
-    getTodoList(); // todoList 불러오기
+    getTodoList(1); // todoList 불러오기
 
     // 할 일 추가 - TodoSimpleForm 컴포넌트에서 받아온 데이터 추가 시킨다
     const addTask = async (todo) => {
@@ -106,6 +116,27 @@ export default {
         triggerToast('deleteTask - ERROR!!', 'danger');
       }
     };
+
+    // todo 전체 삭제 modal 열기
+    const openDelAllModal = () => {
+      console.log('open Del All modal!');
+      showDelAllModal.value = true;
+    }
+
+    // todo 전체삭제 modal 창 닫기
+    const closeModal = () => {
+      showDelAllModal.value = false;
+    }
+
+    // todo 전체 삭제하기
+    const deleteAllTodo = async () => {
+      showDelAllModal.value = false; // 모달 닫기
+      allTodoIdArray.value = await axios.get('todoList'); // 전체 데이터 조회
+
+      const allPostsObj = allTodoIdArray.value.data;
+      allPostsObj.map((allPostsObj) => deleteTask(allPostsObj.id)); // id값 하나하나 삭제요청
+    }
+   
 
     // 완료한 일 체크 - TodoList 컴포넌트에서 받아온 데이터로 수정한다. > 자식 컴포넌트 자체에서 데이터 조작하면 안 됨
     const toggleTodo = async (index) => {
@@ -160,7 +191,11 @@ export default {
       toastMessage,
       toastAlertType,
       showToast,
-      moveToCreatePage
+      moveToCreatePage,
+      openDelAllModal,
+      showDelAllModal,
+      closeModal,
+      deleteAllTodo
     }
   }
 }
