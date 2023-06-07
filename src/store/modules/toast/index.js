@@ -24,14 +24,15 @@ export default {
     }
   },
   actions: {
-    triggerToast({ commit }, message, type='success') {
+    triggerToast({ commit }, payload) {
+      // message, type='success'
       // commit('UPDATE_TOAST_MESSAGE', message);
       // commit('UPDATE_TOAST_ALERT_TYPE', type);
       // commit('UPDATE_TOAST_STATUS', true);
       commit('ADD_TOAST', {
         id: Date.now(),
-        message,
-        type
+        message: payload.message,
+        type: payload.type
       });
 
       // 토스트 컴포넌트 다시 숨김

@@ -9,8 +9,8 @@ export const useToast = () => {
   // const toastMessage = computed(() => store.state.toast.toastMessage);
   // const toastAlertType = computed(() => store.state.toast.toastAlertType);
 
-  const triggerToast = (msg, type='success') => {
-    store.dispatch('toast/triggerToast', msg, type); // vuex
+  const triggerToast = (message, type='success') => {
+    store.dispatch('toast/triggerToast', { message, type }); // vuex
   }
 
   return {
