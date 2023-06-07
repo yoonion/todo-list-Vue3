@@ -8,7 +8,7 @@
     },
     {
       "subject": "gd",
-      "completed": false,
+      "completed": true,
       "body": "gd",
       "id": 2
     },
@@ -50,7 +50,7 @@
     },
     {
       "subject": "ㅎㅇ",
-      "completed": false,
+      "completed": true,
       "body": "ㅎㅇ",
       "id": 9
     },
@@ -68,7 +68,7 @@
     },
     {
       "subject": "gd",
-      "completed": false,
+      "completed": true,
       "body": "gd",
       "id": 12
     }
